@@ -54,7 +54,7 @@ namespace hackaton.api.Data
 
         private async Task CheckTeamAsync()
         {
-            if (!_context.Rewards.Any())
+            if (!_context.Teams.Any())
             {
                 var hackaton = _context.Hackatons.FirstOrDefault();
                 _context.Teams.Add(new Team { Name= "Los mejores 1", NumberMembers = 3, Hackaton = hackaton });
@@ -65,7 +65,7 @@ namespace hackaton.api.Data
 
         private async Task CheckParticipantAsync()
         {
-            if (!_context.Rewards.Any())
+            if (!_context.Participants.Any())
             {
                 var team = _context.Teams.FirstOrDefault();
                 _context.Participants.Add(new Participant { Name= "Name 1", Rol = "developer", Experience = "desarrollo + test", Team = team});
@@ -76,7 +76,7 @@ namespace hackaton.api.Data
 
         private async Task CheckProjectAsync()
         {
-            if (!_context.Rewards.Any())
+            if (!_context.Projects.Any())
             {
                 var team = _context.Teams.FirstOrDefault();
                 _context.Projects.Add(new Project { Name= "Name 1", Description = "desarrollo app movil", Status = "en desarrollo", Team = team });
@@ -87,7 +87,7 @@ namespace hackaton.api.Data
 
         private async Task CheckEvaluationAsync()
         {
-            if (!_context.Rewards.Any())
+            if (!_context.Evaluations.Any())
             {
                 var project = _context.Projects.FirstOrDefault();
                 var mentor = _context.Mentors.FirstOrDefault();

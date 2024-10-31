@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+
+@page "/hackatons/create"
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+
+
+<h3>Hackaton Create</h3>
+
+<HackatonForm @ref="hackatonForm" Hackaton="Hackaton" OnSubmit="Create" ReturnAction="Return" />
+
+@code {
+    public Hackaton Hackaton = new();
+    public HackatonForm hackatonForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/hackatons", Hackaton);
+        if (responseHttp.Error)
+        {
+            var mensaje = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", mensaje);
+            return;
+        }
+        navigationManager.NavigateTo("/hackatons");
+
+    }
+
+    private void Return(){
+        navigationManager.NavigateTo("/hackatons");
+    }
+}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace hackaton.shared.Entities
@@ -16,6 +17,8 @@ namespace hackaton.shared.Entities
         [Required]
         public string Description { get; set; }
 
+        [JsonIgnore]
         public Hackaton Hackaton { get; set; }
+        public int HackatonID { get; set; }
     }
 }

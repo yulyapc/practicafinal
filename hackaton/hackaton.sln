@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hackaton.shared", "hackaton.shared\hackaton.shared.csproj", "{EC47E7DD-0681-481F-ABDE-CAEA5914BD9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hackaton.shared", "hackaton.shared\hackaton.shared.csproj", "{EC47E7DD-0681-481F-ABDE-CAEA5914BD9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hackaton.api", "hackaton.api\hackaton.api.csproj", "{89EA50C1-5A3D-4A00-AC96-15894C3C5BBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hackaton.api", "hackaton.api\hackaton.api.csproj", "{89EA50C1-5A3D-4A00-AC96-15894C3C5BBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hackaton.WEB", "hackaton.WEB\hackaton.WEB.csproj", "{F7C24B9D-546B-4163-884F-7B341B51E051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{89EA50C1-5A3D-4A00-AC96-15894C3C5BBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89EA50C1-5A3D-4A00-AC96-15894C3C5BBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89EA50C1-5A3D-4A00-AC96-15894C3C5BBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7C24B9D-546B-4163-884F-7B341B51E051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7C24B9D-546B-4163-884F-7B341B51E051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7C24B9D-546B-4163-884F-7B341B51E051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7C24B9D-546B-4163-884F-7B341B51E051}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

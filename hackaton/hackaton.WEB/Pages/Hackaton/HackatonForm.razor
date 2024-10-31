@@ -1,0 +1,91 @@
+﻿@using hackaton.shared.Entities
+
+<h3>HackatonForm</h3>
+
+<EditForm Model="Hackaton" OnSubmit="OnSubmit">
+
+<DataAnnotationsValidator/>
+
+<div class="mb-3">
+
+    <label>Nombre</label>
+    <div>
+        <InputText width="10" @bind-Value="Hackaton.Name" />
+
+    </div>
+
+</div>
+
+    <div class="mb-3">
+
+        <label>Tema</label>
+        <div>
+
+            <InputText width="10" @bind-Value="Hackaton.Topic" />
+
+        </div>
+
+    </div>
+
+
+    <div class="mb-3">
+
+    <label>Organizador</label>
+    <div>
+
+            <InputText width="10" @bind-Value="Hackaton.Organizer" />
+
+    </div>
+
+</div>
+
+
+    <div class="mb-3">
+
+        <label>Fecha inicio</label>
+        <div>
+
+            <InputDate width="10" @bind-Value="Hackaton.StartDate" />
+
+        </div>
+
+    </div>
+
+
+
+    <div class="mb-3">
+
+        <label>Fecha fin</label>
+        <div>
+
+            <InputDate width="10" @bind-Value="Hackaton.EndDate" />
+
+        </div>
+
+    </div>
+
+    <button class="btn btn-primary" type="submit" >Guardar</button>
+    <button class="btn btn-success" onclick="ReturnAction">Regresar</button>
+
+
+</EditForm>
+
+
+
+@code {
+
+    [EditorRequired]
+    [Parameter]
+    public Hackaton Hackaton { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+
+}

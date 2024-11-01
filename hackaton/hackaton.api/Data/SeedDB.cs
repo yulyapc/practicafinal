@@ -1,4 +1,6 @@
-﻿using hackaton.shared.Entities;
+﻿using hackaton.api.Helpers;
+using hackaton.shared.Entities;
+using hackaton.shared.Enums;
 using System.Diagnostics.Eventing.Reader;
 
 namespace hackaton.api.Data
@@ -6,9 +8,12 @@ namespace hackaton.api.Data
     public class SeedDB
     {
         private readonly DataContext _context;
-        public SeedDB(DataContext context)
+        private readonly IUserHelper _userHelper;
+        public SeedDB(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
+
         }
         public async Task SeedAsync()
         {
@@ -20,7 +25,40 @@ namespace hackaton.api.Data
             await CheckParticipantAsync();
             await CheckProjectAsync();
             await CheckEvaluationAsync();
+
+            await CheckRolesAsync();
+            await CheckUserAsync("123", "OAP", "OAP", "test@gmail.com", "2554566", UserType.Admin);
         }
+
+        private async Task CheckRolesAsync()
+        {
+            await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.User.ToString());
+        }
+
+        private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, UserType userType)
+        {
+            var user = await _userHelper.GetUserAsync(email);
+            if (user == null)
+            {
+                user = new User
+                {
+                    Document = document,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    UserName = email,
+
+                    PhoneNumber = phone,
+                    UserType = userType,
+                };
+
+                await _userHelper.AddUserAsync(user, "123456");
+                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+            }
+            return user;
+        }
+
 
         private async Task CheckMentorAsync()
         {
@@ -35,8 +73,8 @@ namespace hackaton.api.Data
         {
             if (!_context.Hackatons.Any())
             {
-                _context.Hackatons.Add(new Hackaton { Name = "Pedro", StartDate = DateTime.Now, EndDate =  DateTime.Now.AddDays(10), Topic = "Seguridad", Organizer= "Pepito Perez" });
-                _context.Hackatons.Add(new Hackaton { Name = "Lucas", StartDate = DateTime.Now, EndDate =  DateTime.Now.AddDays(20), Topic = "IA", Organizer = "Luisito Dominguez" });
+                _context.Hackatons.Add(new Hackaton { Name = "Hackaton 1", StartDate = DateTime.Now, EndDate =  DateTime.Now.AddDays(10), Topic = "Seguridad", Organizer= "Pepito Perez" });
+                _context.Hackatons.Add(new Hackaton { Name = "Hackaton 2", StartDate = DateTime.Now, EndDate =  DateTime.Now.AddDays(20), Topic = "IA", Organizer = "Luisito Dominguez" });
             }
             await _context.SaveChangesAsync();
         }

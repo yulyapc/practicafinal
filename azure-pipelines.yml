@@ -12,7 +12,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  proyecto: hackaton.api/hackaton.api.csproj
+  proyecto: hackaton.api.csproj
 steps:
 - task: UseDotNet@2
   displayName: 'ASP.NET Core 8'

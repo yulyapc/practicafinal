@@ -19,7 +19,7 @@ namespace hackaton.api.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            return Ok(await _context.Rewards.ToListAsync());
+            return Ok(await _context.Rewards.Include(r => r.Hackaton).ToListAsync());
         }
 
         //Get a reward by param {id}

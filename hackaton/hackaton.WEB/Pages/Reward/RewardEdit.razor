@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+
+@page "/rewards/edit/{Id:int}"
+
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService swal
+
+
+<h3>Editar rewards</h3>
+
+@if (Reward is null)
+{
+    <div class="align-items-center">
+        <img src="https://i.gifer.com/2GU.gif" />
+    </div>
+}
+else
+{
+    <RewardForm @ref="rewardForm" Reward="Reward" OnSubmit="Edit" ReturnAction="Return" />
+}
+
+@code {
+    public Reward Reward = new();
+    public RewardForm rewardForm;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHTTP = await repository.GetAsync<Reward>($"/api/rewards/{Id}");
+
+        if (responseHTTP.Error)
+        {
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("rewards");
+            }
+            else
+            {
+                var messageError = await responseHTTP.GetErrorMessageAsync();
+                await swal.FireAsync("Error", messageError, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            Reward = responseHTTP.Response;
+        }
+    }
+
+    private async Task Edit()
+    {
+        var responseHTTP = await repository.PutAsync("/api/rewards", Reward);
+
+        if (responseHTTP.Error)
+        {
+            var mensajeError = await responseHTTP.GetErrorMessageAsync();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+          
+            navigationManager.NavigateTo("/rewards");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/rewards");
+    }
+}

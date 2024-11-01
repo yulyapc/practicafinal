@@ -20,7 +20,7 @@ steps:
     packageType: 'sdk'
     version: '8.0.403'
     includePreviewVersions: true
-- script: dotnet build --configuration $(buildConfiguration) hackaton.api/hackaton.api.csproj
+- script: dotnet build --configuration $(buildConfiguration) hackaton.api.csproj
   displayName: 'dotnet build $(buildConfiguration)'
 - task: CmdLine@2
   displayName: 'Installing EF Core CLI'

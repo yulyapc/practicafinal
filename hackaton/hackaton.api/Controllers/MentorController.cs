@@ -1,10 +1,15 @@
 ﻿using hackaton.api.Data;
 using hackaton.shared.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace hackaton.api.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
+
     [ApiController]
     [Route("/api/mentors")]
     public class MentorController: ControllerBase

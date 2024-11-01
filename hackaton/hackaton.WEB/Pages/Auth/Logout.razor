@@ -1,0 +1,19 @@
+﻿@page "/logout"
+
+@inject ILoginService loginService
+@using hackaton.WEB.Auth;
+@using hackaton.WEB.Services
+@using hackaton.WEB.AuthenticationProviders
+
+
+@inject NavigationManager navigationManager
+
+<p>Cerrando sesión...</p>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await loginService.LogoutAsync();
+        navigationManager.NavigateTo("/");
+    }
+}

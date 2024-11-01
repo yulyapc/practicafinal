@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hackaton.shared", "hackaton
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hackaton.api", "hackaton.api\hackaton.api.csproj", "{89EA50C1-5A3D-4A00-AC96-15894C3C5BBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hackaton.WEB", "hackaton.WEB\hackaton.WEB.csproj", "{F7C24B9D-546B-4163-884F-7B341B51E051}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hackaton.WEB", "hackaton.WEB\hackaton.WEB.csproj", "{F7C24B9D-546B-4163-884F-7B341B51E051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

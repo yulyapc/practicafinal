@@ -112,8 +112,7 @@ app.MapControllers();
 app.UseCors(routes => routes
 .AllowAnyMethod() 
 .AllowAnyHeader()
-.SetIsOriginAllowed(origin =>true )
-.AllowCredentials()
+.WithOrigins("https://itmhackatonapi.azurewebsites.net/")
 );
 
 app.Run();

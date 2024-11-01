@@ -109,11 +109,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 // permisos para consumir la api
-app.UseCors(x => x
-
+app.UseCors(routes => routes
 .AllowAnyMethod()
 .AllowAnyHeader()
 .SetIsOriginAllowed(origin => true)
-.AllowCredentials());
+.AllowCredentials()
+);
 
 app.Run();

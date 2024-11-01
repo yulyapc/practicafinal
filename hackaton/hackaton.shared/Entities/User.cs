@@ -28,9 +28,6 @@ public  class User:IdentityUser
         [Required(ErrorMessage = "El campo {2} es obligatorio.")]
         public string LastName { get; set; } 
 
-        [Display(Name = "Foto")]
-        public string Photo { get; set; }
-
         [Display(Name = "Tipo de usuario")]
         public UserType UserType { get; set; } //Enum
 

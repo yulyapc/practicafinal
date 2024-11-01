@@ -65,7 +65,6 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
-//builder.Services.AddScoped<IFileStorage, FileStorage>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(x => x.TokenValidationParameters = new TokenValidationParameters
@@ -108,12 +107,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// permisos para consumir la api
-app.UseCors(routes => routes
+app.UseCors(x => x
+
 .AllowAnyMethod()
 .AllowAnyHeader()
 .SetIsOriginAllowed(origin => true)
-.AllowCredentials()
-);
+.AllowCredentials());
 
 app.Run();

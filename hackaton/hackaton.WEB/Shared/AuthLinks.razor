@@ -2,12 +2,6 @@
 <AuthorizeView>
     <Authorized>
         Hola, <a href="EditUser" class="nav-link btn btn-link">@context.User.Identity!.Name</a>
-        @if (!string.IsNullOrEmpty(photoUser))
-        {
-            <div class="mx-2">
-                <img src="@photoUser" width="50" height="50" style="border-radius:50%" />
-            </div>
-        }
 
         <a href="Logout" class="nav-link btn btn-link">Cerrar Sesión</a>
     </Authorized>
@@ -18,7 +12,6 @@
 </AuthorizeView>
 
 @code {
-    private string photoUser;
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
@@ -27,10 +20,5 @@
     {
         var authenticationState = await authenticationStateTask;
         var claims = authenticationState.User.Claims.ToList();
-        var photoClaim = claims.FirstOrDefault(x => x.Type == "Photo");
-        if (photoClaim is not null)
-        {
-            photoUser = photoClaim.Value;
-        }
     }
 }

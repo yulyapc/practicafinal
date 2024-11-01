@@ -1,4 +1,4 @@
-﻿@page "/mentor"
+﻿@page "/mentors"
 @using hackaton.WEB.Repositories
 @using hackaton.shared.Entities
 @using hackaton.WEB.Shared
@@ -29,7 +29,7 @@
                         <td>@mentor.Name </td>
                         <td>@mentor.Experience</td>
                         <td>
-                            <a href="/rewards/edit/@mentor.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
+                            <a href="/mentors/edit/@mentor.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
                             <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(mentor))><i class="oi oi-trash" /> Borrar</button>
                         </td>
                     </tr>

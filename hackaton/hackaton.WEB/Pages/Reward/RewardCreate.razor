@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+
+@page "/rewards/create"
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+
+
+<h3>Reward Create</h3>
+
+<RewardForm @ref="rewardForm" Reward="Reward" OnSubmit="Create" ReturnAction="Return" />
+
+@code {
+    public Reward Reward = new();
+    public RewardForm rewardForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/rewards", Reward);
+        if (responseHttp.Error)
+        {
+            var mensaje = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", mensaje);
+            return;
+        }
+        navigationManager.NavigateTo("/rewards");
+
+    }
+
+    private void Return(){
+        navigationManager.NavigateTo("/rewards");
+    }
+}

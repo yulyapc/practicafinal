@@ -1,4 +1,4 @@
-﻿@page "/hackatons"
+﻿@page "/rewards"
 @using hackaton.WEB.Repositories
 @using hackaton.shared.Entities
 @using hackaton.WEB.Shared
@@ -7,37 +7,30 @@
 @inject SweetAlertService swal
 @inject NavigationManager navigationManager
 
-<h3>Hackatons</h3>
+<h3>Rewards</h3>
 
 <div class="mb-3">
-    <a class="btn btn-primary" href="/hackatons/create">New Hackaton</a>
+    <a class="btn btn-primary" href="/rewards/create">New reward</a>
 </div>
 
-<GenericList MyList="Hackatons">
+<GenericList MyList="Rewards">
     <Body>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Nombre hackaton</th>
-                    <th>Tema</th>
-                    <th>Fecha inicio</th>
-                    <th>Fecha Fin</th>
-                    <th> Responsable
-                    </th>
+                    <th>Premio</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var hackaton in Hackatons!)
+                @foreach (var reward in Rewards!)
                 {
                     <tr>
-                        <td>@hackaton.Name </td>
-                        <td>@hackaton.Topic</td>
-                        <td>@hackaton.StartDate </td>
-                        <td>@hackaton.EndDate</td>
-                        <td>@hackaton.Organizer</td>
+                        <td>@reward.Hackaton.Name </td>
+                        <td>@reward.Description</td>
                         <td>
-                            <a href="/hackatons/edit/@hackaton.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
-                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(hackaton))><i class="oi oi-trash" /> Borrar</button>
+                            <a href="/rewards/edit/@reward.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
+                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(reward))><i class="oi oi-trash" /> Borrar</button>
                         </td>
                     </tr>
                 }
@@ -49,7 +42,9 @@
 </GenericList>
 
 @code {
+    public List<Reward> Rewards { get; set; }
     public List<Hackaton> Hackatons { get; set; }
+
 
     protected async override Task OnInitializedAsync()
     {
@@ -58,11 +53,11 @@
 
     private async Task Load()
     {
-        var responseHppt = await repository.GetAsync<List<Hackaton>>("/api/hackatons");
-        Hackatons = responseHppt.Response!;
+        var responseHppt = await repository.GetAsync<List<Reward>>("/api/rewards");
+        Rewards = responseHppt.Response!;
     }
 
-    private async Task DeleteAsync(Hackaton Hackaton)
+    private async Task DeleteAsync(Reward Reward)
     {
         var result = await swal.FireAsync(new SweetAlertOptions
             {
@@ -79,7 +74,7 @@
             return;
         }
 
-        var responseHTTP = await repository.DeleteAsync($"api/hackatons/{Hackaton.Id}");
+        var responseHTTP = await repository.DeleteAsync($"api/rewards/{Reward.Id}");
 
         if (responseHTTP.Error)
         {

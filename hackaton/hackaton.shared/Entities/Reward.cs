@@ -17,7 +17,6 @@ namespace hackaton.shared.Entities
         [Required]
         public string Description { get; set; }
 
-        [JsonIgnore]
         public Hackaton Hackaton { get; set; }
         public int HackatonID { get; set; }
     }

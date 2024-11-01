@@ -109,10 +109,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 // permisos para consumir la api
-app.UseCors(routes => routes
-.AllowAnyMethod() 
+app.UseCors(x => x
+
+.AllowAnyMethod()
 .AllowAnyHeader()
-.WithOrigins("https://itmhackatonapi.azurewebsites.net/")
-);
+.SetIsOriginAllowed(origin => true)
+.AllowCredentials());
 
 app.Run();

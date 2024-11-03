@@ -111,7 +111,7 @@ app.UseCors(x => x
 
 .AllowAnyMethod()
 .AllowAnyHeader()
-.SetIsOriginAllowed(origin => true)
+.WithOrigins("https://itmhackatonweb.azurewebsites.net/")
 .AllowCredentials());
 
 app.Run();

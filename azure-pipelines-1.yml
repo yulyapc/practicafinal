@@ -14,6 +14,7 @@ variables:
   buildConfiguration: 'Release'
   proyectoAPI: hackaton/hackaton.api/hackaton.api.csproj
   proyectoBlazor: hackaton/hackaton.WEB/hackaton.WEB.csproj
+
 steps:
 - task: UseDotNet@2
   displayName: 'ASP.NET Core 8'
@@ -21,6 +22,7 @@ steps:
     packageType: 'sdk'
     version: '8.0.403'
     includePreviewVersions: true
+    installationPath: 
 # Compila el backend
 - script: dotnet build --configuration $(buildConfiguration) $(proyectoAPI)
   displayName: 'dotnet build $(buildConfiguration)'
@@ -34,24 +36,25 @@ steps:
 - task: CmdLine@2
   displayName: 'Generating DB script'
   inputs:
-    script: 'dotnet ef migrations script -i -o $(Build.ArtifactStagingDirectory)\api\migrate.sql --project $(proyectoAPI)'
+    script: 'dotnet ef migrations script -i -o $(Build.ArtifactStagingDirectory)\migrate.sql --project $(proyecto)'
+# Publica la api
 - task: DotNetCoreCLI@2
   displayName: 'Publishing API...'
   inputs:
     command: 'publish'
     publishWebProjects: false
     projects: $(proyectoAPI)
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\api --runtime win-x86 --self-contained true'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/api --runtime win-x86 --self-contained true'
     zipAfterPublish: false
     modifyOutputPath: false
 # Publica el frontend Blazor
 - task: DotNetCoreCLI@2
-  displayName: 'Publishing Blazor WEB...'
+  displayName: 'Publishing Blazor Frontend...'
   inputs:
     command: 'publish'
     publishWebProjects: false
     projects: $(proyectoBlazor)
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\WEB --runtime win-x86 --self-contained true'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/WEB --runtime win-x86 --self-contained true'
     zipAfterPublish: false
 - task: PublishBuildArtifacts@1
   inputs:

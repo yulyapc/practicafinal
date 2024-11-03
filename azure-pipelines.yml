@@ -12,7 +12,8 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  proyecto: hackaton/hackaton.api/hackaton.api.csproj
+  proyectoAPI: hackaton/hackaton.api/hackaton.api.csproj
+  proyectoBlazor: hackaton/hackaton.WEB/hackaton.WEB.csproj
 steps:
 - task: UseDotNet@2
   displayName: 'ASP.NET Core 8'
@@ -20,8 +21,12 @@ steps:
     packageType: 'sdk'
     version: '8.0.403'
     includePreviewVersions: true
-- script: dotnet build --configuration $(buildConfiguration) hackaton/hackaton.api/hackaton.api.csproj
+# Compila el backend
+- script: dotnet build --configuration $(buildConfiguration) $(proyectoAPI)
   displayName: 'dotnet build $(buildConfiguration)'
+# Compila el frontend Blazor
+- script: dotnet build --configuration $(buildConfiguration) $(proyectoBlazor)
+  displayName: 'Build Frontend Blazor $(buildConfiguration)'
 - task: CmdLine@2
   displayName: 'Installing EF Core CLI'
   inputs:
@@ -29,16 +34,25 @@ steps:
 - task: CmdLine@2
   displayName: 'Generating DB script'
   inputs:
-    script: 'dotnet ef migrations script -i -o $(Build.ArtifactStagingDirectory)\migrate.sql --project $(proyecto)'
+    script: 'dotnet ef migrations script -i -o $(Build.ArtifactStagingDirectory)\api\migrate.sql --project $(proyectoAPI)'
 - task: DotNetCoreCLI@2
-  displayName: 'Publishing App...'
+  displayName: 'Publishing API...'
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: $(proyecto)
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --runtime win-x86 --self-contained true'
+    projects: $(proyectoAPI)
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\api --runtime win-x86 --self-contained true'
     zipAfterPublish: false
     modifyOutputPath: false
+# Publica el frontend Blazor
+- task: DotNetCoreCLI@2
+  displayName: 'Publishing Blazor WEB...'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: $(proyectoBlazor)
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\WEB --runtime win-x86 --self-contained true'
+    zipAfterPublish: false
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'

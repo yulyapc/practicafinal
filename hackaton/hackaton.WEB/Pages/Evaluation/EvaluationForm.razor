@@ -1,0 +1,95 @@
+﻿@using hackaton.shared.Entities
+
+<h3>EvaluationForm</h3>
+
+@inject IRepository repository
+
+<EditForm Model="Evaluation" OnSubmit="OnSubmit">
+
+<DataAnnotationsValidator />
+
+    <div class="mb-3">
+
+        <label>Mentor</label>
+        <InputSelect @bind-Value="Evaluation.MentorID">
+            @foreach (var mentor in Mentors)
+            {
+                <option value="@mentor.Id">@mentor.Name</option>
+            }
+        </InputSelect>
+
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Proyecto</label>
+        <InputSelect @bind-Value="Evaluation.ProjectID">
+            @foreach (var project in Projects)
+            {
+                <option value="@project.Id">@project.Name</option>
+            }
+        </InputSelect>
+
+
+    </div>
+
+
+    <div class="mb-3">
+        <label>Puntuación</label>
+        <div>
+            <InputNumber width="10" @bind-Value="Evaluation.Score" />
+
+        </div>
+
+    </div>
+
+    <div class="mb-3">
+        <label>Observacion</label>
+        <div>
+            <InputText width="10" @bind-Value="Evaluation.Remarks" />
+
+        </div>
+
+    </div>
+
+
+    <button class="btn btn-primary" type="submit" >Guardar</button>
+    <button class="btn btn-success" onclick="ReturnAction">Regresar</button>
+</EditForm>
+
+
+
+@code {
+
+    [EditorRequired]
+    [Parameter]
+    public Evaluation Evaluation { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+    public List<Mentor> Mentors { get; set; }
+    public List<Project> Projects { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        var responseHppt1 = await repository.GetAsync<List<Mentor>>("/api/mentors");
+        Mentors = responseHppt1.Response!;
+
+        var responseHppt2 = await repository.GetAsync<List<Project>>("/api/projects");
+        Projects = responseHppt2.Response!;
+    }
+
+}

@@ -1,0 +1,85 @@
+﻿@using hackaton.shared.Entities
+
+<h3>ParticipantForm</h3>
+
+@inject IRepository repository
+
+<EditForm Model="Participant" OnSubmit="OnSubmit">
+
+<DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Nombre</label>
+        <div>
+            <InputText width="10" @bind-Value="Participant.Name" />
+
+        </div>
+
+    </div>
+
+
+    <div class="mb-3">
+        <label>Rol</label>
+        <div>
+            <InputText width="10" @bind-Value="Participant.Rol" />
+
+        </div>
+
+    </div>
+
+    <div class="mb-3">
+        <label>Experiencia</label>
+        <div>
+            <InputText width="10" @bind-Value="Participant.Experience" />
+
+        </div>
+
+    </div>
+
+<div class="mb-3">
+
+        <label>Equipo</label>
+        <InputSelect @bind-Value="Participant.TeamID">
+            @foreach (var team in Teams)
+            {
+                <option value="@team.Id">@team.Name</option>
+            }
+        </InputSelect>
+
+
+</div>
+    <button class="btn btn-primary" type="submit" >Guardar</button>
+    <button class="btn btn-success" onclick="ReturnAction">Regresar</button>
+</EditForm>
+
+
+
+@code {
+
+    [EditorRequired]
+    [Parameter]
+    public Participant Participant { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+    public List<Team> Teams { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadTeams();
+    }
+
+    private async Task LoadTeams()
+    {
+        var responseHppt = await repository.GetAsync<List<Team>>("/api/teams");
+        Teams = responseHppt.Response!;
+    }
+
+}

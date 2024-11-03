@@ -1,0 +1,100 @@
+﻿@page "/participant"
+@using hackaton.WEB.Repositories
+@using hackaton.shared.Entities
+@using hackaton.WEB.Shared
+
+@inject IRepository repository
+@inject SweetAlertService swal
+@inject NavigationManager navigationManager
+
+<h3>Participantes</h3>
+
+<div class="mb-3">
+    <a class="btn btn-primary" href="/participants/create">Nuevo proyecto</a>
+</div>
+
+<GenericList MyList="Participants">
+    <Body>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Rol</th>
+                    <th>Experiencia</th>
+                    <th>Equipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var participant in Participants!)
+                {
+                    <tr>
+                        <td>@participant.Name </td>
+                        <td>@participant.Rol</td>
+                        <td>@participant.Experience</td>
+                        <td>@participant.Team.Name </td>
+                        <td>
+                            <a href="/participants/edit/@participant.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
+                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(participant))><i class="oi oi-trash" /> Borrar</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </Body>
+</GenericList>
+
+@code {
+    public List<Participant> Participants { get; set; }
+    public List<Team> Teams { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        var responseHppt = await repository.GetAsync<List<Participant>>("/api/participants");
+        Participants = responseHppt.Response!;
+    }
+
+    private async Task DeleteAsync(Participant Participant)
+    {
+        var result = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = "¿Esta seguro que quieres borrar el registro?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true
+            });
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+
+        if (confirm)
+        {
+            return;
+        }
+
+        var responseHTTP = await repository.DeleteAsync($"api/participants/{Participant.Id}");
+
+        if (responseHTTP.Error)
+        {
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                var mensajeError = await responseHTTP.GetErrorMessageAsync();
+                await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            await Load();
+        }
+    }
+}
+

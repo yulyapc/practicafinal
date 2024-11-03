@@ -20,12 +20,10 @@ namespace hackaton.shared.Entities
         [MaxLength(100, ErrorMessage = "EL comentario debe ser menor a 100 caracteres")]
         public string Remarks { get; set; }
 
-        [JsonIgnore]
         public Project Project { get; set; }
 
         public int ProjectID { get; set; }
 
-        [JsonIgnore]
         public Mentor Mentor { get; set; }
 
         public int MentorID { get; set; }

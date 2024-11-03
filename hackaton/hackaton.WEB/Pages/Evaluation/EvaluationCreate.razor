@@ -1,34 +1,34 @@
 ﻿@using Microsoft.AspNetCore.Authorization;
 
-@page "/mentors/create"
+@page "/evaluations/create"
 
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
 
 
-<h3>Mentor Create</h3>
+<h3>Evaluacion</h3>
 
-<MentorForm @ref="mentorForm" Mentor="Mentor" OnSubmit="Create" ReturnAction="Return" />
+<EvaluationForm @ref="evaluationForm" Evaluation="Evaluation" OnSubmit="Create" ReturnAction="Return" />
 
 @code {
-    public Mentor Mentor = new();
-    public MentorForm mentorForm;
+    public Evaluation Evaluation = new();
+    public EvaluationForm evaluationForm;
 
     private async Task Create()
     {
-        var responseHttp = await repository.PostAsync("/api/mentors", Mentor);
+        var responseHttp = await repository.PostAsync("/api/evaluations", Evaluation);
         if (responseHttp.Error)
         {
             var mensaje = await responseHttp.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", mensaje);
             return;
         }
-        navigationManager.NavigateTo("/mentors");
+        navigationManager.NavigateTo("/evaluations");
 
     }
 
     private void Return(){
-        navigationManager.NavigateTo("/mentors");
+        navigationManager.NavigateTo("/evaluations");
     }
 }

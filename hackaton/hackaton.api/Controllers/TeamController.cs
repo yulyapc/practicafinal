@@ -19,7 +19,7 @@ namespace hackaton.api.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            return Ok(await _context.Teams.ToListAsync());
+            return Ok(await _context.Teams.Include(r => r.Hackaton).ToListAsync());
         }
 
         //Get a team by param {id}

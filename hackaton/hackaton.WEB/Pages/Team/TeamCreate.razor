@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+
+@page "/teams/create"
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+
+
+<h3>Mentor Create</h3>
+
+<TeamForm @ref="teamForm" Team="Team" OnSubmit="Create" ReturnAction="Return" />
+
+@code {
+    public Team Team = new();
+    public TeamForm teamForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/teams", Team);
+        if (responseHttp.Error)
+        {
+            var mensaje = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", mensaje);
+            return;
+        }
+        navigationManager.NavigateTo("/teams");
+
+    }
+
+    private void Return(){
+        navigationManager.NavigateTo("/teams");
+    }
+}

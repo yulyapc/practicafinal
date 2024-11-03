@@ -1,0 +1,96 @@
+﻿@using hackaton.shared.Entities
+
+<h3>ProjectForm</h3>
+
+@inject IRepository repository
+
+<EditForm Model="Project" OnSubmit="OnSubmit">
+
+<DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Nombre proyecto</label>
+        <div>
+            <InputText width="10" @bind-Value="Project.Name" />
+
+        </div>
+
+    </div>
+
+
+    <div class="mb-3">
+        <label>Descripción</label>
+        <div>
+            <InputText width="10" @bind-Value="Project.Description" />
+
+        </div>
+
+    </div>
+
+    <div class="mb-3">
+        <label>Estado</label>
+        <div>
+            <InputText width="10" @bind-Value="Project.Status" />
+
+        </div>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Fecha inicio</label>
+        <div>
+
+            <InputDate width="10" @bind-Value="Project.EndDate" />
+
+        </div>
+
+    </div>
+
+<div class="mb-3">
+
+        <label>Equipo</label>
+        <InputSelect @bind-Value="Project.TeamID">
+            @foreach (var team in Teams)
+            {
+                <option value="@team.Id">@team.Name</option>
+            }
+        </InputSelect>
+
+
+</div>
+    <button class="btn btn-primary" type="submit" >Guardar</button>
+    <button class="btn btn-success" onclick="ReturnAction">Regresar</button>
+</EditForm>
+
+
+
+@code {
+
+    [EditorRequired]
+    [Parameter]
+    public Project Project { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+    public List<Team> Teams { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadHackatons();
+    }
+
+    private async Task LoadHackatons()
+    {
+        var responseHppt = await repository.GetAsync<List<Team>>("/api/teams");
+        Teams = responseHppt.Response!;
+    }
+
+}

@@ -1,0 +1,70 @@
+﻿@using hackaton.shared.Entities
+
+<h3>TeamForm</h3>
+
+@inject IRepository repository
+
+<EditForm Model="Team" OnSubmit="OnSubmit">
+
+<DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Nombre equipo</label>
+        <div>
+            <InputText width="10" @bind-Value="Team.Name" />
+
+        </div>
+
+    </div>
+
+<div class="mb-3">
+        <label>Num miembros</label>
+    <div>
+            <InputNumber width="10" @bind-Value="Team.NumberMembers" />
+    </div>
+
+        <label>Hackaton</label>
+        <InputSelect @bind-Value="Team.HackatonID">
+            @foreach (var hackaton in Hackatons)
+            {
+                <option value="@hackaton.Id">@hackaton.Name</option>
+            }
+        </InputSelect>
+
+
+</div>
+    <button class="btn btn-primary" type="submit" >Guardar</button>
+    <button class="btn btn-success" onclick="ReturnAction">Regresar</button>
+</EditForm>
+
+
+
+@code {
+
+    [EditorRequired]
+    [Parameter]
+    public Team Team { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+    public List<Hackaton> Hackatons { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadHackatons();
+    }
+
+    private async Task LoadHackatons()
+    {
+        var responseHppt = await repository.GetAsync<List<Hackaton>>("/api/hackatons");
+        Hackatons = responseHppt.Response!;
+    }
+
+}

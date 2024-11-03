@@ -24,7 +24,6 @@ namespace hackaton.shared.Entities
         [JsonIgnore]
         public ICollection<Participant> Participants { get; set; }
 
-        [JsonIgnore]
         public Hackaton Hackaton { get; set; }
 
         public int HackatonID { get; set; }

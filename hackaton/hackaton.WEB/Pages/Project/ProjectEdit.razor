@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+
+@page "/projects/edit/{Id:int}"
+
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService swal
+
+
+<h3>Editar proyectos</h3>
+
+@if (Project is null)
+{
+    <div class="align-items-center">
+        <img src="https://i.gifer.com/2GU.gif" />
+    </div>
+}
+else
+{
+    <ProjectForm @ref="projectForm" Project="Project" OnSubmit="Edit" ReturnAction="Return" />
+
+}
+
+@code {
+    public Project Project = new();
+    public ProjectForm projectForm;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHTTP = await repository.GetAsync<Project>($"/api/projects/{Id}");
+
+        if (responseHTTP.Error)
+        {
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("projects");
+            }
+            else
+            {
+                var messageError = await responseHTTP.GetErrorMessageAsync();
+                await swal.FireAsync("Error", messageError, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            Project = responseHTTP.Response;
+        }
+    }
+
+    private async Task Edit()
+    {
+        var responseHTTP = await repository.PutAsync("/api/projects", Project);
+
+        if (responseHTTP.Error)
+        {
+            var mensajeError = await responseHTTP.GetErrorMessageAsync();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+            navigationManager.NavigateTo("/projects");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/projects");
+    }
+}

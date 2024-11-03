@@ -32,7 +32,6 @@ namespace hackaton.shared.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
-        [JsonIgnore]
         public Team Team { get; set; }
 
         public int TeamID { get; set; }

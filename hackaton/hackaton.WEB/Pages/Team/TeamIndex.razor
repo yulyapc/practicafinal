@@ -1,0 +1,99 @@
+﻿@page "/teams"
+@using hackaton.WEB.Repositories
+@using hackaton.shared.Entities
+@using hackaton.WEB.Shared
+
+@inject IRepository repository
+@inject SweetAlertService swal
+@inject NavigationManager navigationManager
+
+<h3>Teams</h3>
+
+<div class="mb-3">
+    <a class="btn btn-primary" href="/teams/create">Nuevo equipo</a>
+</div>
+
+<GenericList MyList="Teams">
+    <Body>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre equipo</th>
+                    <th>Num miembros</th>
+                    <th>Nombre hackaton</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var teams in Teams!)
+                {
+                    <tr>
+                        <td>@teams.Name </td>
+                        <td>@teams.NumberMembers</td>
+                        <td>@teams.Hackaton.Name </td>
+                        <td>
+                            <a href="/teams/edit/@teams.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
+                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(teams))><i class="oi oi-trash" /> Borrar</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </Body>
+</GenericList>
+
+@code {
+    public List<Team> Teams { get; set; }
+    public List<Hackaton> Hackatons { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        var responseHppt = await repository.GetAsync<List<Team>>("/api/teams");
+        Teams = responseHppt.Response!;
+    }
+
+    private async Task DeleteAsync(Team Team)
+    {
+        var result = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = "¿Esta seguro que quieres borrar el registro?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true
+            });
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+
+        if (confirm)
+        {
+            return;
+        }
+
+        var responseHTTP = await repository.DeleteAsync($"api/teams/{Team.Id}");
+
+        if (responseHTTP.Error)
+        {
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                var mensajeError = await responseHTTP.GetErrorMessageAsync();
+                await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            await Load();
+        }
+    }
+}
+

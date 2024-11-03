@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+
+@page "/participants/create"
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+
+
+<h3>Participantes</h3>
+
+<ParticipantForm @ref="participantForm" Participant="Participant" OnSubmit="Create" ReturnAction="Return" />
+
+
+@code {
+    public Participant Participant = new();
+    public ParticipantForm participantForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/participants", Participant);
+        if (responseHttp.Error)
+        {
+            var mensaje = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", mensaje);
+            return;
+        }
+        navigationManager.NavigateTo("/participants");
+
+    }
+
+    private void Return(){
+        navigationManager.NavigateTo("/participants");
+    }
+}

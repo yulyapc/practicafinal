@@ -27,7 +27,6 @@ namespace hackaton.shared.Entities
         [Required]
         public string Experience { get; set; }
 
-        [JsonIgnore]
         public Team Team { get; set; }
 
         public int TeamID { get; set; }

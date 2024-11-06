@@ -17,7 +17,12 @@ namespace hackaton.shared.Entities
         [Required]
         public string Description { get; set; }
 
+        public string OtherDescription { get; set; }
+
+
         public Hackaton Hackaton { get; set; }
         public int HackatonID { get; set; }
+
+
     }
 }
